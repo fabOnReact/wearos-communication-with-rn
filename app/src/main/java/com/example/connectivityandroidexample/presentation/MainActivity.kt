@@ -37,7 +37,7 @@ import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
 
 class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListener {
-    var countExternal = 0;
+    var countExternal by  mutableStateOf(0)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
@@ -50,15 +50,19 @@ class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListene
     }
 
     fun increaseCount() {
-        countExternal++;
+        countExternal = countExternal + 1;
         Log.d("TESTING: ", "countExternal increased to: " + countExternal);
+        setContent {
+            WearApp(countExternal, { increaseCount() })
+        }
     }
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
         if (messageEvent.getPath().equals("/increase_wear_counter")) {
             println(">>> increase_wear_counter")
+            countExternal = countExternal + 1;
             setContent {
-                WearApp(countExternal++, { increaseCount() })
+                WearApp(countExternal, { increaseCount() })
             }
         }
     }
@@ -73,9 +77,9 @@ fun WearApp(currentCount: Int, increaseCount: () -> Unit) {
                 .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            Counter(currentCount = currentCount)
+            Counter(countExternal = currentCount)
             Button(
-                onClick = increaseCount,
+                onClick = { increaseCount() },
                 modifier = Modifier.offset(x = 0.dp, y = 50.dp),
             ) {
             }
@@ -84,14 +88,13 @@ fun WearApp(currentCount: Int, increaseCount: () -> Unit) {
 }
 
 @Composable
-fun Counter(currentCount: Int) {
-    var countInternal by remember { mutableStateOf(0) }
+fun Counter(countExternal: Int) {
     Text(
-        modifier = Modifier.offset(x = -4.dp, y = -30.dp),
+        modifier = Modifier.offset(x = -3.dp, y = -30.dp),
         textAlign = TextAlign.Center,
         color = Color.Black,
         fontSize = 50.sp,
-        text = currentCount.toString()
+        text = countExternal.toString()
     )
 }
 
