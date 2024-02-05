@@ -6,10 +6,8 @@
 
 package com.example.connectivityandroidexample.presentation
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -17,91 +15,91 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
-import androidx.wear.compose.material.MaterialTheme
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.TimeText
-import com.example.connectivityandroidexample.R
 import com.example.connectivityandroidexample.presentation.theme.ConnectivityAndroidExampleTheme
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
-import com.google.android.gms.wearable.WearableListenerService
-import java.nio.charset.StandardCharsets
 
 class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListener {
+    var countExternal by  mutableStateOf(0)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
 
-        setTheme(android.R.style.Theme_DeviceDefault)
-
         setContent {
-            WearApp("Android")
+            WearApp(0, { increaseCount() })
         }
         Wearable.getMessageClient(this).addListener(this)
     }
 
-/*
-    override fun onPause() {
-        super.onPause()
-        Wearable.getMessageClient(this).removeListener(this)
+    fun increaseCount() {
+        countExternal = countExternal + 1;
+        Log.d("TESTING: ", "countExternal increased to: " + countExternal);
+        setContent {
+            WearApp(countExternal, { increaseCount() })
+        }
     }
-
-
-    override fun onResume() {
-        super.onResume()
-        Wearable.getMessageClient(this).addListener(this)
-
-    }
- */
-
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
-        Log.w("TESTING", " onMessageReceived with messageEvent.getPath(): " + messageEvent.getPath());
         if (messageEvent.getPath().equals("/increase_wear_counter")) {
             println(">>> increase_wear_counter")
-            Log.w("TESTING",  " message received from watch");
+            countExternal = countExternal + 1;
+            setContent {
+                WearApp(countExternal, { increaseCount() })
+            }
         }
     }
 }
 
 @Composable
-fun WearApp(greetingName: String) {
+fun WearApp(currentCount: Int, increaseCount: () -> Unit) {
     ConnectivityAndroidExampleTheme {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colors.background),
+                .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            TimeText()
-            Greeting(greetingName = greetingName)
+            Counter(countExternal = currentCount)
+            Button(
+                onClick = { increaseCount() },
+                modifier = Modifier.offset(x = 0.dp, y = 50.dp),
+            ) {
+            }
         }
     }
 }
 
 @Composable
-fun Greeting(greetingName: String) {
+fun Counter(countExternal: Int) {
     Text(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.offset(x = -3.dp, y = -30.dp),
         textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
-        text = stringResource(R.string.hello_world, greetingName)
+        color = Color.Black,
+        fontSize = 50.sp,
+        text = countExternal.toString()
     )
 }
 
 @Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
 @Composable
 fun DefaultPreview() {
-    WearApp("Preview Android")
+    WearApp(0, { fun() {} })
 }
