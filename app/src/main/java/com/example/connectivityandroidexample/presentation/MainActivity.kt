@@ -37,33 +37,25 @@ import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
 
 class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListener {
-    var countExternal by  mutableStateOf(0)
+    var count by mutableStateOf(0)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
 
         setContent {
-            WearApp(0, { increaseCount() })
+            WearApp(currentCount = count, { increaseCount() })
         }
         Wearable.getMessageClient(this).addListener(this)
     }
 
     fun increaseCount() {
-        countExternal = countExternal + 1;
-        Log.d("TESTING: ", "countExternal increased to: " + countExternal);
-        setContent {
-            WearApp(countExternal, { increaseCount() })
-        }
+        count++;
     }
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
         if (messageEvent.getPath().equals("/increase_wear_counter")) {
-            println(">>> increase_wear_counter")
-            countExternal = countExternal + 1;
-            setContent {
-                WearApp(countExternal, { increaseCount() })
-            }
+            count = count + 1;
         }
     }
 }
@@ -77,7 +69,7 @@ fun WearApp(currentCount: Int, increaseCount: () -> Unit) {
                 .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            Counter(countExternal = currentCount)
+            Counter(count = currentCount)
             Button(
                 onClick = { increaseCount() },
                 modifier = Modifier.offset(x = 0.dp, y = 50.dp),
@@ -88,13 +80,13 @@ fun WearApp(currentCount: Int, increaseCount: () -> Unit) {
 }
 
 @Composable
-fun Counter(countExternal: Int) {
+fun Counter(count: Int) {
     Text(
         modifier = Modifier.offset(x = -3.dp, y = -30.dp),
         textAlign = TextAlign.Center,
         color = Color.Black,
         fontSize = 50.sp,
-        text = countExternal.toString()
+        text = count.toString()
     )
 }
 
