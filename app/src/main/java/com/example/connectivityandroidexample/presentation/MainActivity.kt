@@ -7,6 +7,7 @@
 package com.example.connectivityandroidexample.presentation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Text
 import com.example.connectivityandroidexample.presentation.theme.ConnectivityAndroidExampleTheme
 import com.google.android.gms.wearable.MessageClient
@@ -40,23 +42,28 @@ class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListene
         super.onCreate(savedInstanceState)
 
         setContent {
-            WearApp(0)
+            WearApp(0, { increaseCount() })
         }
         Wearable.getMessageClient(this).addListener(this)
+    }
+
+    fun increaseCount() {
+        countExternal++;
+        Log.d("TESTING: ", "countExternal increased to: " + countExternal);
     }
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
         if (messageEvent.getPath().equals("/increase_wear_counter")) {
             println(">>> increase_wear_counter")
             setContent {
-                WearApp(countExternal++)
+                WearApp(countExternal++, { increaseCount() })
             }
         }
     }
 }
 
 @Composable
-fun WearApp(currentCount: Int) {
+fun WearApp(currentCount: Int, increaseCount: () -> Unit) {
     ConnectivityAndroidExampleTheme {
         Box(
             modifier = Modifier
@@ -64,7 +71,10 @@ fun WearApp(currentCount: Int) {
                 .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            Counter(currentCount = currentCount)
+            // Counter(currentCount = currentCount)
+            Button(onClick = increaseCount) {
+                
+            }
         }
     }
 }
@@ -79,14 +89,13 @@ fun Counter(currentCount: Int) {
         fontSize = 50.sp,
         text = currentCount.toString()
     )
+    Button(onClick = { /*TODO*/ }) {
 
-    fun increaseCounter() {
-        countInternal++;
     }
 }
 
 @Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
 @Composable
 fun DefaultPreview() {
-    WearApp(0)
+    WearApp(0, { fun() {} })
 }
