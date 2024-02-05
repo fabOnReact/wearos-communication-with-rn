@@ -15,6 +15,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Text
@@ -71,9 +73,11 @@ fun WearApp(currentCount: Int, increaseCount: () -> Unit) {
                 .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            // Counter(currentCount = currentCount)
-            Button(onClick = increaseCount) {
-                
+            Counter(currentCount = currentCount)
+            Button(
+                onClick = increaseCount,
+                modifier = Modifier.offset(x = 0.dp, y = 50.dp),
+            ) {
             }
         }
     }
@@ -83,15 +87,12 @@ fun WearApp(currentCount: Int, increaseCount: () -> Unit) {
 fun Counter(currentCount: Int) {
     var countInternal by remember { mutableStateOf(0) }
     Text(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.offset(x = -4.dp, y = -30.dp),
         textAlign = TextAlign.Center,
         color = Color.Black,
         fontSize = 50.sp,
         text = currentCount.toString()
     )
-    Button(onClick = { /*TODO*/ }) {
-
-    }
 }
 
 @Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
