@@ -20,10 +20,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.wear.compose.material.MaterialTheme
@@ -43,28 +45,11 @@ class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListene
 
         super.onCreate(savedInstanceState)
 
-        setTheme(android.R.style.Theme_DeviceDefault)
-
         setContent {
             WearApp("Android")
         }
         Wearable.getMessageClient(this).addListener(this)
     }
-
-/*
-    override fun onPause() {
-        super.onPause()
-        Wearable.getMessageClient(this).removeListener(this)
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-        Wearable.getMessageClient(this).addListener(this)
-
-    }
- */
-
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
         Log.w("TESTING", " onMessageReceived with messageEvent.getPath(): " + messageEvent.getPath());
@@ -81,21 +66,21 @@ fun WearApp(greetingName: String) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colors.background),
+                .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            TimeText()
-            Greeting(greetingName = greetingName)
+            Counter(greetingName = greetingName)
         }
     }
 }
 
 @Composable
-fun Greeting(greetingName: String) {
+fun Counter(greetingName: String) {
     Text(
         modifier = Modifier.fillMaxWidth(),
         textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
+        color = Color.Black,
+        fontSize = 50.sp,
         text = stringResource(R.string.hello_world, greetingName)
     )
 }
