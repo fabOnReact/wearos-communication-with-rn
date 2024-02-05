@@ -6,52 +6,93 @@
 
 package com.example.connectivityandroidexample.presentation
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
-import androidx.compose.runtime.Composable
+import androidx.annotation.Nullable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material.Button
-import androidx.wear.compose.material.Text
-import com.example.connectivityandroidexample.presentation.theme.ConnectivityAndroidExampleTheme
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
+import com.google.android.gms.wearable.Node
 import com.google.android.gms.wearable.Wearable
 
+
 class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListener {
+    private lateinit var mobileDeviceListener: MobileDeviceListener
     var count by mutableStateOf(0)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
-
+        mobileDeviceListener = MobileDeviceListener(this) { node ->
+            // update UI
+        }
         setContent {
             WearApp(currentCount = count, { increaseCount() })
         }
-        Wearable.getMessageClient(this).addListener(this)
+    }
+
+    public override fun onStart() {
+        super.onStart()
+        mobileDeviceListener.start()
+        // manage other components that need to respond
+        // to the activity lifecycle
+    }
+
+    public override fun onStop() {
+        super.onStop()
+        mobileDeviceListener.stop()
+        // manage other components that need to respond
+        // to the activity lifecycle
     }
 
     fun increaseCount() {
         count++;
+        /*
+        val nodeClient = Wearable.getNodeClient(applicationContext)
+        val listNodes = nodeClient.getConnectedNodes();
+        val nodes = Tasks.await(nodeClient.getConnectedNodes())
+        if (nodes.size > 0) {
+            for (node in nodes) {
+                // sendMessageToClient(node)
+            }
+        } else {
+            Toast.makeText(
+                applicationContext,
+                "No connected nodes found",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+        */
     }
+
+    fun sendMessageToClient(node: Node) {
+        /*
+        try {
+            val sendTask = Wearable.getMessageClient(applicationContext).sendMessage(
+                node.getId(), "/increase_wear_counter", null
+            )
+            val onSuccessListener: OnSuccessListener<Any> =
+                OnSuccessListener { Log.w("TESTING ", "onSuccess") }
+            sendTask.addOnSuccessListener(onSuccessListener)
+            val onFailureListener =
+                OnFailureListener { e -> Log.w("TESTING ", "onFailure with e: $e") }
+            sendTask.addOnFailureListener(onFailureListener)
+        } catch (e: Exception) {
+            Log.w("TESTING", "e $e")
+        }
+         */
+    }
+
+    fun onConnected(@Nullable bundle: Bundle?) {
+        Wearable.getMessageClient(this).addListener(this)
+        // InitNodesTask().execute(this.applicationContext)
+    }
+
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
         if (messageEvent.getPath().equals("/increase_wear_counter")) {
@@ -60,38 +101,44 @@ class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListene
     }
 }
 
-@Composable
-fun WearApp(currentCount: Int, increaseCount: () -> Unit) {
-    ConnectivityAndroidExampleTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White),
-            contentAlignment = Alignment.Center
-        ) {
-            Counter(count = currentCount)
-            Button(
-                onClick = { increaseCount() },
-                modifier = Modifier.offset(x = 0.dp, y = 50.dp),
-            ) {
-            }
-        }
+internal class MobileDeviceListener(
+    private val context: Context,
+    private val callback: (Node) -> Unit
+) {
+
+    fun start() {
+        // connect to system location service
+    }
+
+    fun stop() {
+        // disconnect from system location service
     }
 }
 
-@Composable
-fun Counter(count: Int) {
-    Text(
-        modifier = Modifier.offset(x = -3.dp, y = -30.dp),
-        textAlign = TextAlign.Center,
-        color = Color.Black,
-        fontSize = 50.sp,
-        text = count.toString()
-    )
-}
+/*
 
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
-@Composable
-fun DefaultPreview() {
-    WearApp(0, { fun() {} })
-}
+    private class InitNodesTask : AsyncTask<GoogleApiClient?, Void?, String?>() {
+        protected override fun doInBackground(): String? {
+            val nodeClient = Wearable.getNodeClient()
+            val listNodes = nodeClient.getConnectedNodes();
+            val nodes = Tasks.await(nodeClient.getConnectedNodes())
+            /* val connectedNodes = Wearable.NodeApi.getConnectedNodes(client).await().nodes
+            for (connectedNode in connectedNodes) {
+                if (connectedNode.isNearby) {
+                    return connectedNode.id
+                }
+            }
+            return null
+             */
+        }
+
+        override fun onPostExecute(resultNode: String?) {
+            /*
+            node = resultNode
+            // Because this runs on the main thread it is safe to change the state of the UI.
+            btnIncreaseCounter.setEnabled(resultNode != null)
+             */
+        }
+    }
+
+ */
