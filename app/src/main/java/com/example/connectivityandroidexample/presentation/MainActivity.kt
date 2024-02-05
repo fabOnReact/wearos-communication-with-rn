@@ -34,6 +34,7 @@ import com.example.connectivityandroidexample.presentation.theme.ConnectivityAnd
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
+import com.google.android.gms.wearable.WearableListenerService
 import java.nio.charset.StandardCharsets
 
 class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListener {
@@ -50,6 +51,7 @@ class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListene
         Wearable.getMessageClient(this).addListener(this)
     }
 
+/*
     override fun onPause() {
         super.onPause()
         Wearable.getMessageClient(this).removeListener(this)
@@ -61,6 +63,7 @@ class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListene
         Wearable.getMessageClient(this).addListener(this)
 
     }
+ */
 
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
