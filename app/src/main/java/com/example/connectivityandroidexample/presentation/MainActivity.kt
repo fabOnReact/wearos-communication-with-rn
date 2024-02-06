@@ -15,8 +15,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Node
@@ -76,14 +74,8 @@ class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListene
             val sendTask = Wearable.getMessageClient(applicationContext).sendMessage(
                 node.getId(), "/increase_phone_counter", null
             )
-            val onSuccessListener: OnSuccessListener<Any> =
-                OnSuccessListener { Log.w("TESTING: ", "from wear onSuccess") }
-            sendTask.addOnSuccessListener(onSuccessListener)
-            val onFailureListener =
-                OnFailureListener { e -> Log.w("TESTING from wear: ", "onFailure with e: $e") }
-            sendTask.addOnFailureListener(onFailureListener)
         } catch (e: Exception) {
-            Log.w("TESTING from wear: ", "e $e")
+            Log.w("WearOS: ", "e $e")
         }
     }
 
