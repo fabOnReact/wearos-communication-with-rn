@@ -87,7 +87,9 @@ class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListene
     }
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
-        if (messageEvent.getPath().equals("message")) {
+        val jsonObject = JSONObject(messageEvent.path)
+        val event = jsonObject.getString("event")
+        if (event.equals("message")) {
             count = count + 1;
         }
     }
