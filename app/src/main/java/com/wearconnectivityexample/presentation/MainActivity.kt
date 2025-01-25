@@ -4,7 +4,7 @@
  * changes to the libraries and their usages.
  */
 
-package com.example.connectivityandroidexample.presentation
+package com.wearconnectivityexample.presentation
 
 import android.os.Bundle
 import android.util.Log
@@ -22,6 +22,9 @@ import com.google.android.gms.wearable.Wearable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import org.json.JSONObject
+
+
 
 class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListener {
     private var nodes: MutableList<Node>? = null
@@ -70,9 +73,13 @@ class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListene
     }
 
     fun sendMessageToClient(node: Node) {
+        val jsonObject = JSONObject().apply {
+            put("event", "message")
+            put("text", "hello")
+        }
         try {
             val sendTask = Wearable.getMessageClient(applicationContext).sendMessage(
-                node.getId(), "/increase_phone_counter", null
+                node.getId(), jsonObject.toString(), null
             )
         } catch (e: Exception) {
             Log.w("WearOS: ", "e $e")
@@ -80,7 +87,7 @@ class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListene
     }
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
-        if (messageEvent.getPath().equals("/increase_wear_counter")) {
+        if (messageEvent.getPath().equals("message")) {
             count = count + 1;
         }
     }

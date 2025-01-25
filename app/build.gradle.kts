@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.connectivityandroidexample"
+    namespace = "com.wearconnectivityexample"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.rn072"
+        applicationId = "com.wearconnectivityexample"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
@@ -16,18 +16,27 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+    signingConfigs {
+        getByName("debug") {
+                storeFile = file("debug.keystore")
+                storePassword = "android"
+                keyAlias = "androiddebugkey"
+                keyPassword = "android"
         }
     }
+    buildTypes {
+        getByName("debug") {
+                signingConfig = signingConfigs.getByName("debug")
+        }
+        getByName("release") {
+                // Caution! In production, you need to generate your own keystore file.
+                // see https://reactnative.dev/docs/signed-apk-android.
+                signingConfig = signingConfigs.getByName("debug")
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8

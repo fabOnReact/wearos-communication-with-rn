@@ -1,4 +1,4 @@
-package com.example.connectivityandroidexample.presentation
+package com.wearconnectivityexample.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Text
-import com.example.connectivityandroidexample.presentation.theme.ConnectivityAndroidExampleTheme
+import com.wearconnectivityexample.presentation.theme.ConnectivityAndroidExampleTheme
 
 @Composable
 fun WearApp(currentCount: Int, increaseCount: () -> Unit, sendMessagesToClient: () -> Unit) {
