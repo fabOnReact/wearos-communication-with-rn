@@ -19,36 +19,36 @@ import com.wearconnectivityexample.presentation.theme.ConnectivityAndroidExample
 
 @Composable
 fun WearApp(currentCount: Int, increaseCount: () -> Unit, sendMessagesToClient: () -> Unit) {
-  ConnectivityAndroidExampleTheme {
-    Box(
-      modifier = Modifier
-          .fillMaxSize()
-          .background(Color.White),
-      contentAlignment = Alignment.Center
-    ) {
-      Counter(count = currentCount)
-      Button(
-        onClick = { sendMessagesToClient() },
-        modifier = Modifier.offset(x = 0.dp, y = 50.dp),
-      ) {
-      }
+    ConnectivityAndroidExampleTheme {
+        Box(
+            modifier = Modifier
+              .fillMaxSize()
+              .background(Color.White),
+            contentAlignment = Alignment.Center
+        ) {
+            Counter(count = currentCount)
+            Button(
+                onClick = { sendMessagesToClient() },
+                modifier = Modifier.offset(x = 0.dp, y = 50.dp),
+            ) {
+            }
+        }
     }
-  }
 }
 
 @Composable
 fun Counter(count: Int) {
-  Text(
-    modifier = Modifier.offset(x = -3.dp, y = -30.dp),
-    textAlign = TextAlign.Center,
-    color = Color.Black,
-    fontSize = 50.sp,
-    text = count.toString()
-  )
+    Text(
+        modifier = Modifier.offset(x = -3.dp, y = -30.dp),
+        textAlign = TextAlign.Center,
+        color = Color.Black,
+        fontSize = 50.sp,
+        text = count.toString()
+    )
 }
 
 @Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
 @Composable
 fun DefaultPreview() {
-  WearApp(0, { fun() {} }, { fun() {} })
+    WearApp(0, { fun() {} }, { fun() {} })
 }
