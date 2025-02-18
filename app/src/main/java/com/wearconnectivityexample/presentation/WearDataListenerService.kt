@@ -35,6 +35,7 @@ class WearDataListenerService : WearableListenerService() {
 										inputStream.copyTo(outputStream)
 								}
 						}
+						Log.w("WearOS", "File transfer successful")
 				}.addOnFailureListener { e ->
 						Log.e("WearOS", "File transfer failed", e)
 				}
