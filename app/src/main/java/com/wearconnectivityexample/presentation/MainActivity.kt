@@ -6,6 +6,7 @@
 
 package com.wearconnectivityexample.presentation
 
+import ImageViewer
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity

@@ -34,6 +34,8 @@ class WearDataListenerService : WearableListenerService() {
 								file.outputStream().use { outputStream ->
 										inputStream.copyTo(outputStream)
 								}
+								// Update the shared state (ensure this runs on the main thread)
+								FileState.imagePath = file.absolutePath
 						}
 						Log.w("WearOS", "File transfer successful")
 				}.addOnFailureListener { e ->
