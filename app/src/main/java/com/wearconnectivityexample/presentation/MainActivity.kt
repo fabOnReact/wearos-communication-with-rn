@@ -26,73 +26,72 @@ import kotlinx.coroutines.tasks.await
 import org.json.JSONObject
 
 
-
 class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListener {
-    private var nodes: MutableList<Node>? = null
-    var count by mutableStateOf(0)
+  private var nodes: MutableList<Node>? = null
+  var count by mutableStateOf(0)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+  override fun onCreate(savedInstanceState: Bundle?) {
+    installSplashScreen()
 
-        super.onCreate(savedInstanceState)
-        Wearable.getMessageClient(this).addListener(this)
+    super.onCreate(savedInstanceState)
+    Wearable.getMessageClient(this).addListener(this)
 
-        setContent {
-            WearApp(currentCount = count, { increaseCount() }) { sendMessagesToClient() }
-            ImageViewer()
+    setContent {
+      WearApp(currentCount = count, { increaseCount() }) { sendMessagesToClient() }
+      ImageViewer()
+    }
+  }
+
+  public override fun onStart() {
+    super.onStart()
+    lifecycleScope.launch(Dispatchers.Main) {
+      nodes = getNodes();
+    }
+  }
+
+  fun sendMessagesToClient() {
+    if (nodes!!.size > 0) {
+      for (node in nodes!!) {
+        if (nodes != null) {
+          sendMessageToClient(node)
         }
+      }
     }
+  }
 
-    public override fun onStart() {
-        super.onStart()
-        lifecycleScope.launch(Dispatchers.Main) {
-            nodes = getNodes();
-        }
-    }
+  public override fun onStop() {
+    super.onStop()
+    // disconnect from client and disable button
+  }
 
-    fun sendMessagesToClient() {
-        if (nodes!!.size > 0) {
-            for (node in nodes!!) {
-                if (nodes != null) {
-                    sendMessageToClient(node)
-                }
-            }
-        }
-    }
+  suspend fun getNodes(): MutableList<Node> {
+    val nodeClient = Wearable.getNodeClient(this);
+    return nodeClient.getConnectedNodes().await();
+  }
 
-    public override fun onStop() {
-        super.onStop()
-        // disconnect from client and disable button
-    }
+  fun increaseCount() {
+    count++;
+  }
 
-    suspend fun getNodes(): MutableList<Node> {
-        val nodeClient = Wearable.getNodeClient(this);
-        return nodeClient.getConnectedNodes().await();
+  fun sendMessageToClient(node: Node) {
+    val jsonObject = JSONObject().apply {
+      put("event", "message")
+      put("text", "hello")
     }
+    try {
+      val sendTask = Wearable.getMessageClient(applicationContext).sendMessage(
+        node.getId(), jsonObject.toString(), null
+      )
+    } catch (e: Exception) {
+      Log.w("WearOS: ", "e $e")
+    }
+  }
 
-    fun increaseCount() {
-        count++;
+  override fun onMessageReceived(messageEvent: MessageEvent) {
+    val jsonObject = JSONObject(messageEvent.path)
+    val event = jsonObject.getString("event")
+    if (event.equals("message")) {
+      count = count + 1;
     }
-
-    fun sendMessageToClient(node: Node) {
-        val jsonObject = JSONObject().apply {
-            put("event", "message")
-            put("text", "hello")
-        }
-        try {
-            val sendTask = Wearable.getMessageClient(applicationContext).sendMessage(
-                node.getId(), jsonObject.toString(), null
-            )
-        } catch (e: Exception) {
-            Log.w("WearOS: ", "e $e")
-        }
-    }
-
-    override fun onMessageReceived(messageEvent: MessageEvent) {
-        val jsonObject = JSONObject(messageEvent.path)
-        val event = jsonObject.getString("event")
-        if (event.equals("message")) {
-            count = count + 1;
-        }
-    }
+  }
 }

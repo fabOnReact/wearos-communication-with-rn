@@ -14,45 +14,42 @@ import com.wearconnectivityexample.presentation.FileState
 
 @Composable
 fun ImageViewer() {
-		val context = LocalContext.current
-		val imagePath = FileState.imagePath
+  val context = LocalContext.current
+  val imagePath = FileState.imagePath
 
-		Box(modifier = Modifier.fillMaxSize()) {
-				if (imagePath != null && File(imagePath).exists()) {
-						Image(
-								painter = rememberAsyncImagePainter(File(imagePath)),
-								contentDescription = "Received Image",
-								modifier = Modifier.fillMaxSize(),
-								contentScale = ContentScale.Crop
-						)
-				} else {
-						Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-								Text(text = "Image not available")
-						}
-				}
+  Box(modifier = Modifier.fillMaxSize()) {
+    if (imagePath != null && File(imagePath).exists()) {
+      Image(
+        painter = rememberAsyncImagePainter(File(imagePath)),
+        contentDescription = "Received Image",
+        modifier = Modifier.fillMaxSize(),
+        contentScale = ContentScale.Crop
+      )
+    } else {
+      Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text(text = "Image not available")
+      }
+    }
 
-				// Overlay the delete button in the top-right corner
-				BoxWithConstraints (
-						modifier = Modifier
-								.fillMaxSize(),
-						contentAlignment = Alignment.TopEnd
-				) {
-						if (imagePath != null && File(imagePath).exists()) {
-								Button(
-										onClick = {
-												if (imagePath != null) {
-														val file = File(imagePath)
-														if (file.exists()) {
-																file.delete()
-																FileState.imagePath = null
-														}
-												}
-										},
-										modifier = Modifier.padding(top = 16.dp, end	= 90.dp)
-								) {
-										Text("Delete")
-								}
-						}
-				}
-		}
+    // Overlay the delete button in the top-right corner
+    BoxWithConstraints(
+      modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopEnd
+    ) {
+      if (imagePath != null && File(imagePath).exists()) {
+        Button(
+          onClick = {
+            if (imagePath != null) {
+              val file = File(imagePath)
+              if (file.exists()) {
+                file.delete()
+                FileState.imagePath = null
+              }
+            }
+          }, modifier = Modifier.padding(top = 16.dp, end = 90.dp)
+        ) {
+          Text("Delete")
+        }
+      }
+    }
+  }
 }
