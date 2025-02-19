@@ -6,6 +6,7 @@
 
 package com.wearconnectivityexample.presentation
 
+import ImageViewer
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -25,7 +26,6 @@ import kotlinx.coroutines.tasks.await
 import org.json.JSONObject
 
 
-
 class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListener {
     private var nodes: MutableList<Node>? = null
     var count by mutableStateOf(0)
@@ -38,6 +38,7 @@ class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListene
 
         setContent {
             WearApp(currentCount = count, { increaseCount() }) { sendMessagesToClient() }
+            ImageViewer()
         }
     }
 

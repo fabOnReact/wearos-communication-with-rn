@@ -22,8 +22,8 @@ fun WearApp(currentCount: Int, increaseCount: () -> Unit, sendMessagesToClient: 
     ConnectivityAndroidExampleTheme {
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White),
+              .fillMaxSize()
+              .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
             Counter(count = currentCount)
