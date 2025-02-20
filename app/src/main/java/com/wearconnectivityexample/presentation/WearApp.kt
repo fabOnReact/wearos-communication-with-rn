@@ -1,5 +1,6 @@
 package com.wearconnectivityexample.presentation
 
+import RecordComponent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,7 @@ import android.util.Log
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
+
 @Composable
 fun WearApp(currentCount: Int, increaseCount: () -> Unit, sendMessagesToClient: () -> Unit) {
     ConnectivityAndroidExampleTheme {
@@ -26,7 +28,7 @@ fun WearApp(currentCount: Int, increaseCount: () -> Unit, sendMessagesToClient: 
                 .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            RecordVoiceScreen(
+            RecordComponent(
                 onRecordClicked = { Log.d("RecordVoiceScreen", "clicked") }
             )
         }
