@@ -33,6 +33,7 @@ import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.ToggleButton
 import com.wearconnectivityexample.R
 import androidx.wear.compose.material.Text
+import com.google.android.gms.wearable.DataMap
 
 @Composable
 fun RecordVoiceScreen() {
@@ -43,7 +44,7 @@ fun RecordVoiceScreen() {
     // Hold a reference to the MediaRecorder.
     var mediaRecorder by remember { mutableStateOf<MediaRecorder?>(null) }
     // Define the output file path; we use internal storage.
-    val outputFile = remember { "${context.filesDir.absolutePath}/voice_message.mp4" }
+    val outputFile = remember { "${context.filesDir.absolutePath}/voice_message.mp3" }
 
     // Function to start recording.
     fun startRecording() {
@@ -95,6 +96,8 @@ fun RecordVoiceScreen() {
  */
 fun sendVoiceMessage(context: Context, filePath: String) {
     val file = File(filePath)
+    val fileName = file.name // Extract the original filename (e.g., "voice_message.mp3")
+    val fileExtension = file.extension // Extract file type (e.g., "mp3", "wav")
     val dataClient = Wearable.getDataClient(context)
     val asset = try {
         FileInputStream(file).use { fis ->
@@ -106,8 +109,15 @@ fun sendVoiceMessage(context: Context, filePath: String) {
         Log.e("RecordVoiceScreen", "Error creating asset", e)
         return
     }
-    val dataMapRequest = PutDataMapRequest.create("/voice_transfer")
-    dataMapRequest.dataMap.putAsset("voice", asset)
+    val dataMapRequest = PutDataMapRequest.create("/file_transfer")
+    dataMapRequest.dataMap.putAsset("file", asset)
+    // Include metadata similar to Watch Connectivity API
+    // https://github.com/watch-connectivity/react-native-watch-connectivity/blob/f22da8191ec75daeaecb7a80a65b6c0a87f7d72b/ios/RNWatch/RNWatch.m#L466
+    val metadata = DataMap()
+    metadata.putString("fileName", fileName)
+    metadata.putString("fileType", fileExtension)
+    dataMapRequest.dataMap.putDataMap("metadata", metadata)
+
     dataMapRequest.dataMap.putLong("timestamp", System.currentTimeMillis())
     val request = dataMapRequest.asPutDataRequest()
     dataClient.putDataItem(request)
