@@ -24,6 +24,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.json.JSONObject
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import android.app.Activity
 
 
 class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListener {
@@ -47,6 +52,7 @@ class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListene
         lifecycleScope.launch(Dispatchers.Main) {
             nodes = getNodes();
         }
+        requestAudioPermission(this);
     }
 
     fun sendMessagesToClient() {
@@ -93,5 +99,12 @@ class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListene
         if (event.equals("message")) {
             count = count + 1;
         }
+    }
+}
+
+fun requestAudioPermission(activity: Activity) {
+    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO)
+        != PackageManager.PERMISSION_GRANTED) {
+        ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.RECORD_AUDIO), 100)
     }
 }
