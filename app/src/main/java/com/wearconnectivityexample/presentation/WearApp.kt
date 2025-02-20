@@ -1,37 +1,35 @@
 package com.wearconnectivityexample.presentation
 
+import RecordComponent
+import RecordVoiceScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Text
 import com.wearconnectivityexample.presentation.theme.ConnectivityAndroidExampleTheme
+import android.util.Log
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+
 
 @Composable
 fun WearApp(currentCount: Int, increaseCount: () -> Unit, sendMessagesToClient: () -> Unit) {
     ConnectivityAndroidExampleTheme {
         Box(
             modifier = Modifier
-              .fillMaxSize()
-              .background(Color.White),
+                .fillMaxSize()
+                .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            Counter(count = currentCount)
-            Button(
-                onClick = { sendMessagesToClient() },
-                modifier = Modifier.offset(x = 0.dp, y = 50.dp),
-            ) {
-            }
+            RecordVoiceScreen()
         }
     }
 }
