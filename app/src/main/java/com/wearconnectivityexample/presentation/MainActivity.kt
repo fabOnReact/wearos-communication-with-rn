@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListene
 
         setContent {
             WearApp(currentCount = count, { increaseCount() }) { sendMessagesToClient() }
-            ImageViewer()
+            // ImageViewer()
         }
     }
 
