@@ -13,7 +13,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.ChipDefaults
-import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import androidx.compose.ui.res.painterResource
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.ToggleButton
@@ -28,8 +27,6 @@ import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.ToggleButton
 import com.wearconnectivityexample.R
 
-/*
-@OptIn(ExperimentalWearMaterialApi::class)
 @Composable
 fun RecordVoiceScreen() {
     val context = LocalContext.current
@@ -75,40 +72,13 @@ fun RecordVoiceScreen() {
         }
     }
 
+    val onRecordCallback = if (isRecording) ::stopRecordingAndSend else ::startRecording
     // UI: display a Chip that acts as a toggle button.
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        if (!isRecording) {
-            // When not recording, show the mic button.
-            Chip(
-                onClick = { startRecording() },
-                label = { Text("Record Voice") },
-                chipIcon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_mic),
-                        contentDescription = "Record Voice"
-                    )
-                },
-                chipColors = ChipDefaults.chipColors(),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-            )
-        } else {
-            // When recording, show a Stop button.
-            Chip(
-                onClick = { stopRecordingAndSend() },
-                label = { Text("Stop & Send") },
-                chipIcon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_stop), // Ensure you have an ic_stop drawable
-                        contentDescription = "Stop Recording"
-                    )
-                },
-                chipColors = ChipDefaults.chipColors(),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-            )
-        }
+       RecordComponent(onRecordClicked = onRecordCallback , checked = isRecording)
     }
 }
 
@@ -140,18 +110,17 @@ fun sendVoiceMessage(context: Context, filePath: String) {
         .addOnFailureListener { e ->
             Log.e("RecordVoiceScreen", "Failed to send voice message", e)
         }
-}*/
+}
 
 @Composable
-fun RecordComponent(onRecordClicked: () -> Unit) {
+fun RecordComponent(onRecordClicked: () -> Unit, checked: Boolean) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        var checked by remember { mutableStateOf(true) }
         ToggleButton(
             checked = checked,
-            onCheckedChange = { checked = it },
+            onCheckedChange = { onRecordClicked() },
             enabled = true,
         ) {
             Icon(
