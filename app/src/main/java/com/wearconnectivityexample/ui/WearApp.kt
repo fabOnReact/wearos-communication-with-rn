@@ -6,6 +6,8 @@ import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.navigation.navArgument
+import com.wearconnectivityexample.ui.screens.ChatDetailScreen
+import com.wearconnectivityexample.ui.screens.ChatListScreen
 
 @Composable
 fun WearApp() {
