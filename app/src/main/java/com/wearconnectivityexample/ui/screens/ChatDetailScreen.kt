@@ -1,4 +1,3 @@
-// ChatDetailScreen.kt
 package com.example.mywearosapp.ui.screens
 
 import androidx.compose.foundation.layout.*
