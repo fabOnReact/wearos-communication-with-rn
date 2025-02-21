@@ -20,60 +20,41 @@ fun ChatDetailScreen(
     onRecordClick: () -> Unit
 ) {
     val listState = rememberScalingLazyListState()
+    val messageList = listOf("Hello, How are you?", "I'm good. And you?", "I'm great. What did you do today?")
 
     Box(modifier = Modifier.fillMaxSize()) {
         ScalingLazyColumn(
             state = listState,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            scalingParams = ScalingLazyColumnDefaults.scalingParams(
+                edgeScale = 0.8f,
+                minTransitionArea = 0.24f
+            )
         ) {
-            // First message bubble
-            item {
+            items(messageList.size) { index ->
+                val item = messageList[index]
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 4.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Surface(
-                        shape = RoundedCornerShape(16.dp),
-                        color = Color(0xFF97B1DA), // Light blue bubble
-                        modifier = Modifier
-                            .wrapContentWidth()
-                            .padding(4.dp)
-                    ) {
-                        Text(
-                            text = "Hello how are you?",
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                            color = Color.Black
-                        )
-                    }
-                }
-            }
-
-            // Second message bubble
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 4.dp),
-                    horizontalArrangement = Arrangement.Center
+                        .padding(horizontal = 0.dp, vertical = 4.dp),
+                    horizontalArrangement = Arrangement.End
                 ) {
                     Surface(
                         shape = RoundedCornerShape(16.dp),
                         color = Color(0xFF97B1DA),
                         modifier = Modifier
                             .wrapContentWidth()
-                            .padding(4.dp)
+                            .padding(0.dp)
                     ) {
                         Text(
-                            text = "I'm good thanks.",
+                            text = item,
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                             color = Color.Black
                         )
                     }
                 }
             }
-        }
+            }
 
         // Record button at the bottom
         Button(
