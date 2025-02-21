@@ -1,5 +1,6 @@
 package com.wearconnectivityexample.ui
 
+import RecordVoiceScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,13 +28,7 @@ fun WearApp(currentCount: Int, increaseCount: () -> Unit, sendMessagesToClient: 
                 .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            // RecordVoiceScreen()
-            Counter(count = currentCount)
-            Button(
-                onClick = { sendMessagesToClient() },
-                modifier = Modifier.offset(x = 0.dp, y = 50.dp),
-            ) {
-            }
+            RecordVoiceScreen()
         }
     }
 }
