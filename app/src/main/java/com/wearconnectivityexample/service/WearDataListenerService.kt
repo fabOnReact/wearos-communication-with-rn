@@ -1,4 +1,4 @@
-package com.wearconnectivityexample.presentation
+package com.wearconnectivityexample.service
 
 import android.util.Log
 import com.google.android.gms.wearable.Asset
@@ -7,6 +7,7 @@ import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.WearableListenerService
+import com.wearconnectivityexample.data.FileState
 import java.io.File
 
 class WearDataListenerService : WearableListenerService() {

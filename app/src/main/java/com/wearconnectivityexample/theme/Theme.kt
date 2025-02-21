@@ -1,4 +1,4 @@
-package com.wearconnectivityexample.presentation.theme
+package com.wearconnectivityexample.theme
 
 import androidx.compose.runtime.Composable
 import androidx.wear.compose.material.MaterialTheme

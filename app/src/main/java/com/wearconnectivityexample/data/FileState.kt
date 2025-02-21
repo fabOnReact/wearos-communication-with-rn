@@ -1,4 +1,4 @@
-package com.wearconnectivityexample.presentation
+package com.wearconnectivityexample.data
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

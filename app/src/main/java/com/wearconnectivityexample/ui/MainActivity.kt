@@ -4,7 +4,7 @@
  * changes to the libraries and their usages.
  */
 
-package com.wearconnectivityexample.presentation
+package com.wearconnectivityexample.ui
 
 import ImageViewer
 import android.os.Bundle
@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity(), MessageClient.OnMessageReceivedListene
 
         setContent {
             WearApp(currentCount = count, { increaseCount() }) { sendMessagesToClient() }
-            // ImageViewer()
+            ImageViewer()
         }
     }
 

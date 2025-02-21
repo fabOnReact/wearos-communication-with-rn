@@ -4,8 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -15,8 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material.Chip
-import androidx.wear.compose.material.ChipDefaults
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
@@ -30,10 +26,9 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.ToggleButton
 import com.wearconnectivityexample.R
-import androidx.wear.compose.material.Text
 import com.google.android.gms.wearable.DataMap
+import com.wearconnectivityexample.ui.components.AudioRecorder
 
 @Composable
 fun RecordVoiceScreen() {
@@ -86,7 +81,7 @@ fun RecordVoiceScreen() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-       RecordComponent(onRecordClicked = onRecordCallback , checked = isRecording)
+       AudioRecorder(onRecordClicked = onRecordCallback , checked = isRecording)
     }
 }
 
@@ -127,37 +122,4 @@ fun sendVoiceMessage(context: Context, filePath: String) {
         .addOnFailureListener { e ->
             Log.e("RecordVoiceScreen", "Failed to send voice message", e)
         }
-}
-
-@Composable
-fun RecordComponent(onRecordClicked: () -> Unit, checked: Boolean) {
-    val title = if (checked) "Stop Recording" else "Record Voice"
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                modifier = Modifier.padding(bottom = 8.dp),
-                textAlign = TextAlign.Center,
-                color = Color.Black,
-                fontSize = 16.sp,
-                text = title,
-            )
-            ToggleButton(
-                checked = checked,
-                onCheckedChange = { onRecordClicked() },
-                enabled = true,
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_mic),
-                    contentDescription = "airplane",
-                    modifier =
-                    Modifier
-                        .size(ToggleButtonDefaults.DefaultIconSize)
-                        .wrapContentSize(align = Alignment.Center),
-                )
-            }
-        }
-    }
 }

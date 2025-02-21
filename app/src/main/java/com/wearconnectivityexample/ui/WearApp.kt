@@ -1,7 +1,5 @@
-package com.wearconnectivityexample.presentation
+package com.wearconnectivityexample.ui
 
-import RecordComponent
-import RecordVoiceScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,9 +11,9 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Text
-import com.wearconnectivityexample.presentation.theme.ConnectivityAndroidExampleTheme
-import android.util.Log
+import com.wearconnectivityexample.theme.ConnectivityAndroidExampleTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
@@ -29,7 +27,13 @@ fun WearApp(currentCount: Int, increaseCount: () -> Unit, sendMessagesToClient: 
                 .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            RecordVoiceScreen()
+            // RecordVoiceScreen()
+            Counter(count = currentCount)
+            Button(
+                onClick = { sendMessagesToClient() },
+                modifier = Modifier.offset(x = 0.dp, y = 50.dp),
+            ) {
+            }
         }
     }
 }
