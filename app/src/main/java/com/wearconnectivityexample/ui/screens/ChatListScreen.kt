@@ -38,8 +38,8 @@ fun ChatListScreen(
         modifier = Modifier.fillMaxSize(),
         state = listState,
         scalingParams = ScalingLazyColumnDefaults.scalingParams(
-            edgeScale = 0.005f,
-            minTransitionArea = 0.24f,
+            edgeScale = 0.4f,
+            minTransitionArea = 0.40f,
         )
     ) {
         items(chatList.size) { index ->
