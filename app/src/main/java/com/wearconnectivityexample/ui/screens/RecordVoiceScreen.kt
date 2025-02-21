@@ -2,31 +2,17 @@ import android.content.Context
 import android.media.MediaRecorder
 import android.util.Log
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.ToggleButton
-import androidx.wear.compose.material.ToggleButtonDefaults
 import com.google.android.gms.wearable.Asset
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
-import androidx.wear.compose.material.Icon
-import com.wearconnectivityexample.R
 import com.google.android.gms.wearable.DataMap
 import com.wearconnectivityexample.ui.components.AudioRecorder
 
@@ -106,8 +92,7 @@ fun sendVoiceMessage(context: Context, filePath: String) {
     }
     val dataMapRequest = PutDataMapRequest.create("/file_transfer")
     dataMapRequest.dataMap.putAsset("file", asset)
-    // Include metadata similar to Watch Connectivity API
-    // https://github.com/watch-connectivity/react-native-watch-connectivity/blob/f22da8191ec75daeaecb7a80a65b6c0a87f7d72b/ios/RNWatch/RNWatch.m#L466
+    // Include metadata similar to Watch Connectivity API https://tinyurl.com/29k38zx2
     val metadata = DataMap()
     metadata.putString("fileName", fileName)
     metadata.putString("fileType", fileExtension)
