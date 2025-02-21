@@ -1,5 +1,4 @@
-// RecordVoiceScreen.kt
-package com.example.wearconnectivityexample.ui
+package com.example.wearconnectivityexample.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

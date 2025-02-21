@@ -1,52 +1,84 @@
-package com.wearconnectivityexample.ui.screens
+// ChatDetailScreen.kt
+package com.example.mywearosapp.ui.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material.Button
-import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.ScalingLazyColumn
-import androidx.wear.compose.material.ScalingLazyListState
+import androidx.wear.compose.material.*
 import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.rememberScalingLazyListState
 
 @Composable
 fun ChatDetailScreen(
     phoneNumber: String,
     onRecordClick: () -> Unit
 ) {
-    val messages = listOf(
-        "Hello how are you?",
-        "I'm good thanks."
-    )
-    val listState: ScalingLazyListState = rememberScalingLazyListState()
+    val listState = rememberScalingLazyListState()
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // List of messages
         ScalingLazyColumn(
             state = listState,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 16.dp)
+            modifier = Modifier.fillMaxSize()
         ) {
+            // First message bubble
             item {
-                Text(text = "Chat with $phoneNumber", modifier = Modifier.padding(8.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 4.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Surface(
+                        shape = RoundedCornerShape(16.dp),
+                        color = Color(0xFF97B1DA), // Light blue bubble
+                        modifier = Modifier
+                            .wrapContentWidth()
+                            .padding(4.dp)
+                    ) {
+                        Text(
+                            text = "Hello how are you?",
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                            color = Color.Black
+                        )
+                    }
+                }
             }
-            items(messages.size) { index ->
-                Text(
-                    text = messages[index],
-                    modifier = Modifier.padding(8.dp)
-                )
+
+            // Second message bubble
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 4.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Surface(
+                        shape = RoundedCornerShape(16.dp),
+                        color = Color(0xFF97B1DA),
+                        modifier = Modifier
+                            .wrapContentWidth()
+                            .padding(4.dp)
+                    ) {
+                        Text(
+                            text = "I'm good thanks.",
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                            color = Color.Black
+                        )
+                    }
+                }
             }
         }
 
         // Record button at the bottom
         Button(
-            onClick = { onRecordClick() },
+            onClick = onRecordClick,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 20.dp)
