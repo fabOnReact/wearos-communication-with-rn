@@ -27,8 +27,8 @@ fun ChatDetailScreen(
             state = listState,
             modifier = Modifier.fillMaxSize(),
             scalingParams = ScalingLazyColumnDefaults.scalingParams(
-                edgeScale = 0.8f,
-                minTransitionArea = 0.24f
+                edgeScale = 0.4f,
+                minTransitionArea = 0.4f
             )
         ) {
             items(messageList.size) { index ->
@@ -54,19 +54,21 @@ fun ChatDetailScreen(
                     }
                 }
             }
-            }
 
-        // Record button at the bottom
-        Button(
-            onClick = onRecordClick,
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 20.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Mic,
-                contentDescription = "Record"
-            )
+            item {
+                // Record button at the bottom
+                Button(
+                    onClick = onRecordClick,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 20.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Mic,
+                        contentDescription = "Record"
+                    )
+                }
+            }
         }
     }
 }
