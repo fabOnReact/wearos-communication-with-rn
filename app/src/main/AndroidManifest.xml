@@ -26,7 +26,7 @@
             android:value="true" />
 
         <activity
-            android:name=".presentation.MainActivity"
+            android:name="com.example.wearconnectivityexample.ui.MainActivity"
             android:exported="true"
             android:taskAffinity=""
             android:theme="@style/MainActivityTheme.Starting">
@@ -38,7 +38,7 @@
         </activity>
 
         <service
-            android:name=".presentation.MainActivity"
+            android:name="com.example.wearconnectivityexample.ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <!-- listeners receive events that match the action and data filters -->
@@ -56,7 +56,7 @@
         </service>
 
         <service
-            android:name=".presentation.WearDataListenerService"
+            android:name=".service.WearDataListenerService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />

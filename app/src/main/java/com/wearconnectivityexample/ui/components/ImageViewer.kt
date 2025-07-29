@@ -1,3 +1,5 @@
+package com.wearconnectivityexample.ui.components
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -10,7 +12,7 @@ import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Text
 import coil.compose.rememberAsyncImagePainter
 import java.io.File
-import com.wearconnectivityexample.presentation.FileState
+import com.wearconnectivityexample.data.FileState
 
 @Composable
 fun ImageViewer() {

@@ -1,3 +1,5 @@
+package com.example.wearconnectivityexample.ui.screens
+
 import android.content.Context
 import android.media.MediaRecorder
 import android.util.Log
@@ -36,7 +38,9 @@ import androidx.wear.compose.material.Text
 import com.google.android.gms.wearable.DataMap
 
 @Composable
-fun RecordVoiceScreen() {
+fun RecordVoiceScreen(
+    onStopRecording: () -> Unit
+) {
     val context = LocalContext.current
 
     // State to track whether recording is in progress.
@@ -75,6 +79,7 @@ fun RecordVoiceScreen() {
             mediaRecorder = null
             isRecording = false
             sendVoiceMessage(context, outputFile)
+            onStopRecording();
         } catch (e: Exception) {
             Log.e("RecordVoiceScreen", "Error stopping recorder", e)
         }
@@ -86,7 +91,7 @@ fun RecordVoiceScreen() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-       RecordComponent(onRecordClicked = onRecordCallback , checked = isRecording)
+        RecordComponent(onRecordClicked = onRecordCallback , checked = isRecording)
     }
 }
 
