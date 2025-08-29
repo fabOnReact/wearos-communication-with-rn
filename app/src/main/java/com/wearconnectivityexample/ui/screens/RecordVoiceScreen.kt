@@ -1,4 +1,4 @@
-package com.example.wearconnectivityexample.ui.screens
+package com.wearconnectivityexample.ui.screens
 
 import android.content.Context
 import android.media.MediaRecorder

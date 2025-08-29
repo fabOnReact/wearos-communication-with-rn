@@ -1,3 +1,5 @@
+package com.wearconnectivityexample.ui.components
+
 import android.content.Context
 import android.media.MediaRecorder
 import android.util.Log
