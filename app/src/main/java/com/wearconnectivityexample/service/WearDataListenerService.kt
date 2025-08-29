@@ -1,6 +1,8 @@
 package com.wearconnectivityexample.service
 
 import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import com.google.android.gms.wearable.Asset
 import com.google.android.gms.wearable.DataEvent
 import com.google.android.gms.wearable.DataEventBuffer
@@ -25,7 +27,7 @@ class WearDataListenerService : WearableListenerService() {
         }
     }
 
-    fun saveReceivedFile(asset: Asset) {
+    private fun saveReceivedFile(asset: Asset) {
         val dataClient = Wearable.getDataClient(this)
         val task = dataClient.getFdForAsset(asset)
 
@@ -36,7 +38,9 @@ class WearDataListenerService : WearableListenerService() {
                     inputStream.copyTo(outputStream)
                 }
                 // Update the shared state (ensure this runs on the main thread)
-                FileState.imagePath = file.absolutePath
+                Handler(Looper.getMainLooper()).post {
+                    FileState.imagePath = file.absolutePath
+                }
             }
             Log.w("WearOS", "File transfer successful")
         }.addOnFailureListener { e ->
