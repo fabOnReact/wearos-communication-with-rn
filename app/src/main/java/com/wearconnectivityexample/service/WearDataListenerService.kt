@@ -7,10 +7,11 @@ import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.WearableListenerService
-import com.wearconnectivityexample.data.FileState
+import com.wearconnectivityexample.data.FileViewModelFactory
 import java.io.File
 
 class WearDataListenerService : WearableListenerService() {
+    private val fileViewModel = FileViewModelFactory.get()
     override fun onDataChanged(dataEvents: DataEventBuffer) {
         for (event in dataEvents) {
             if (event.type == DataEvent.TYPE_CHANGED) {
@@ -36,7 +37,7 @@ class WearDataListenerService : WearableListenerService() {
                     inputStream.copyTo(outputStream)
                 }
                 // Update the shared state (ensure this runs on the main thread)
-                FileState.imagePath = file.absolutePath
+                fileViewModel.setImagePath(file.absolutePath)
             }
             Log.w("WearOS", "File transfer successful")
         }.addOnFailureListener { e ->
