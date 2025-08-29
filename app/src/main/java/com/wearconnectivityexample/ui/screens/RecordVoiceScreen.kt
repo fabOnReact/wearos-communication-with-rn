@@ -47,6 +47,12 @@ fun RecordVoiceScreen(
     var isRecording by remember { mutableStateOf(false) }
     // Hold a reference to the MediaRecorder.
     var mediaRecorder by remember { mutableStateOf<MediaRecorder?>(null) }
+    DisposableEffect(Unit) {
+        onDispose {
+            mediaRecorder?.release()
+            mediaRecorder = null
+        }
+    }
     // Define the output file path; we use internal storage.
     val outputFile = remember { "${context.filesDir.absolutePath}/voice_message.mp3" }
 
