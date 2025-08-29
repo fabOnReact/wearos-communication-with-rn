@@ -79,7 +79,7 @@ fun RecordVoiceScreen(
             mediaRecorder = null
             isRecording = false
             sendVoiceMessage(context, outputFile)
-            onStopRecording();
+            onStopRecording()
         } catch (e: Exception) {
             Log.e("RecordVoiceScreen", "Error stopping recorder", e)
         }

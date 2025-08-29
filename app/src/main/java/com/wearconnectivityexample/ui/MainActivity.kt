@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
 
     public override fun onStart() {
         super.onStart()
-        requestAudioPermission(this);
+        requestAudioPermission(this)
     }
 }
 
