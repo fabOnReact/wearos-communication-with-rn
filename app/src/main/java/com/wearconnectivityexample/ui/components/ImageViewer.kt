@@ -3,6 +3,7 @@ package com.wearconnectivityexample.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -12,12 +13,14 @@ import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Text
 import coil.compose.rememberAsyncImagePainter
 import java.io.File
-import com.wearconnectivityexample.data.FileState
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.wearconnectivityexample.data.FileViewModel
+import com.wearconnectivityexample.data.FileViewModelFactory
 
 @Composable
-fun ImageViewer() {
+fun ImageViewer(fileViewModel: FileViewModel = viewModel(factory = FileViewModelFactory)) {
     val context = LocalContext.current
-    val imagePath = FileState.imagePath
+    val imagePath = fileViewModel.imagePath.collectAsState().value
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (imagePath != null && File(imagePath).exists()) {
@@ -44,7 +47,7 @@ fun ImageViewer() {
                             val file = File(imagePath)
                             if (file.exists()) {
                                 file.delete()
-                                FileState.imagePath = null
+                                fileViewModel.setImagePath(null)
                             }
                         }
                     }, modifier = Modifier.padding(top = 16.dp, end = 90.dp)
