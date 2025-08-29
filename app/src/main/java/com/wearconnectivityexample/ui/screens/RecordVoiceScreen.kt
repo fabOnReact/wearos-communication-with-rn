@@ -29,7 +29,6 @@ import com.google.android.gms.wearable.Asset
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import java.io.File
-import java.io.FileInputStream
 import java.io.IOException
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.ToggleButton
@@ -105,11 +104,8 @@ fun sendVoiceMessage(context: Context, filePath: String) {
     val fileExtension = file.extension // Extract file type (e.g., "mp3", "wav")
     val dataClient = Wearable.getDataClient(context)
     val asset = try {
-        FileInputStream(file).use { fis ->
-            val bytes = ByteArray(file.length().toInt())
-            fis.read(bytes)
-            Asset.createFromBytes(bytes)
-        }
+        val bytes = file.readBytes()
+        Asset.createFromBytes(bytes)
     } catch (e: IOException) {
         Log.e("RecordVoiceScreen", "Error creating asset", e)
         return
