@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.ChipDefaults
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.Text
@@ -156,7 +157,7 @@ fun RecordComponent(onRecordClicked: () -> Unit, checked: Boolean) {
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_mic),
-                    contentDescription = "airplane",
+                    contentDescription = stringResource(id = R.string.content_description_record),
                     modifier =
                     Modifier
                         .size(ToggleButtonDefaults.DefaultIconSize)
