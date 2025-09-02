@@ -9,6 +9,8 @@ import androidx.navigation.navArgument
 import com.example.mywearosapp.ui.screens.ChatDetailScreen
 import com.example.wearconnectivityexample.ui.screens.RecordVoiceScreen
 import com.wearconnectivityexample.ui.screens.ChatListScreen
+import com.wearconnectivityexample.ui.screens.MenuScreen
+import com.wearconnectivityexample.ui.screens.CounterScreen
 
 @Composable
 fun WearApp() {
@@ -16,14 +18,28 @@ fun WearApp() {
 
     SwipeDismissableNavHost(
         navController = navController,
-        startDestination = "chatList"
+        startDestination = "menu"
     ) {
-        composable("chatList") {
+        composable("menu") {
+            MenuScreen(navController)
+        }
+        composable("chatroom") {
             ChatListScreen(
                 onChatSelected = { phoneNumber ->
                     navController.navigate("chatDetail/$phoneNumber")
                 }
             )
+        }
+        composable("sendFile") {
+            RecordVoiceScreen(
+                onStopRecording = {
+                    // Go back to the previous screen, or handle differently
+                    navController.popBackStack()
+                }
+            )
+        }
+        composable("counter") {
+            CounterScreen()
         }
         composable(
             route = "chatDetail/{phoneNumber}",
@@ -32,15 +48,7 @@ fun WearApp() {
             val phoneNumber = backStackEntry.arguments?.getString("phoneNumber") ?: ""
             ChatDetailScreen(
                 phoneNumber = phoneNumber,
-                onRecordClick = { navController.navigate("recordVoice") }
-            )
-        }
-        composable("recordVoice") {
-            RecordVoiceScreen(
-                onStopRecording = {
-                    // Go back to the previous screen, or handle differently
-                    navController.popBackStack()
-                }
+                onRecordClick = { navController.navigate("sendFile") }
             )
         }
     }
