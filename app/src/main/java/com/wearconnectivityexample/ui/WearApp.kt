@@ -9,6 +9,7 @@ import androidx.navigation.navArgument
 import com.example.mywearosapp.ui.screens.ChatDetailScreen
 import com.example.wearconnectivityexample.ui.screens.RecordVoiceScreen
 import com.wearconnectivityexample.ui.screens.ChatListScreen
+import com.wearconnectivityexample.ui.screens.ImageScreen
 
 @Composable
 fun WearApp() {
@@ -32,7 +33,8 @@ fun WearApp() {
             val phoneNumber = backStackEntry.arguments?.getString("phoneNumber") ?: ""
             ChatDetailScreen(
                 phoneNumber = phoneNumber,
-                onRecordClick = { navController.navigate("recordVoice") }
+                onRecordClick = { navController.navigate("recordVoice") },
+                onSendFileClick = { navController.navigate("imageScreen") }
             )
         }
         composable("recordVoice") {
@@ -42,6 +44,9 @@ fun WearApp() {
                     navController.popBackStack()
                 }
             )
+        }
+        composable("imageScreen") {
+            ImageScreen()
         }
     }
 }
