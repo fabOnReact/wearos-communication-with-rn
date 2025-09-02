@@ -27,7 +27,8 @@ import androidx.wear.compose.material.ButtonDefaults
 
 @Composable
 fun ChatListScreen(
-    onChatSelected: (String) -> Unit
+    onChatSelected: (String) -> Unit,
+    onCounterSelected: () -> Unit
 ) {
     val listState = rememberScalingLazyListState()
 
@@ -42,6 +43,17 @@ fun ChatListScreen(
             minTransitionArea = 0.40f,
         )
     ) {
+        item {
+            Chip(
+                onClick = onCounterSelected,
+                label = { Text(text = "Counter") },
+                colors = ChipDefaults.primaryChipColors(
+                    backgroundColor = Color(0xFF3C3C3C),
+                    contentColor = Color.White
+                ),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
         items(chatList.size) { index ->
             when (val item = chatList[index]) {
                 "START_CHAT" -> {

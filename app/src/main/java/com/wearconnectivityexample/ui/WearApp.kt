@@ -9,6 +9,7 @@ import androidx.navigation.navArgument
 import com.example.mywearosapp.ui.screens.ChatDetailScreen
 import com.example.wearconnectivityexample.ui.screens.RecordVoiceScreen
 import com.wearconnectivityexample.ui.screens.ChatListScreen
+import com.wearconnectivityexample.ui.screens.CounterScreen
 
 @Composable
 fun WearApp() {
@@ -22,7 +23,8 @@ fun WearApp() {
             ChatListScreen(
                 onChatSelected = { phoneNumber ->
                     navController.navigate("chatDetail/$phoneNumber")
-                }
+                },
+                onCounterSelected = { navController.navigate("counter") }
             )
         }
         composable(
@@ -42,6 +44,9 @@ fun WearApp() {
                     navController.popBackStack()
                 }
             )
+        }
+        composable("counter") {
+            CounterScreen()
         }
     }
 }
