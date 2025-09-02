@@ -16,7 +16,8 @@ import androidx.wear.compose.material.Text
 @Composable
 fun ChatDetailScreen(
     phoneNumber: String,
-    onRecordClick: () -> Unit
+    onRecordClick: () -> Unit,
+    onSendFileClick: () -> Unit
 ) {
     val listState = rememberScalingLazyListState()
     val messageList = listOf("Hello, How are you?", "I'm good. And you?", "I'm great. What did you do today?")
@@ -55,17 +56,22 @@ fun ChatDetailScreen(
             }
 
             item {
-                // Record button at the bottom
-                Button(
-                    onClick = onRecordClick,
+                Column(
                     modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 20.dp)
+                        .fillMaxWidth()
+                        .padding(bottom = 20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Mic,
-                        contentDescription = "Record"
-                    )
+                    Button(onClick = onRecordClick) {
+                        Icon(
+                            imageVector = Icons.Default.Mic,
+                            contentDescription = "Record"
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(onClick = onSendFileClick) {
+                        Text("Send File")
+                    }
                 }
             }
         }
