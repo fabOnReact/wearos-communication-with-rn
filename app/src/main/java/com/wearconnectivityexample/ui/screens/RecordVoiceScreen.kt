@@ -6,40 +6,43 @@ import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material.Chip
-import androidx.wear.compose.material.ChipDefaults
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.ToggleButton
 import androidx.wear.compose.material.ToggleButtonDefaults
 import com.google.android.gms.wearable.Asset
+import com.google.android.gms.wearable.DataMap
 import com.google.android.gms.wearable.PutDataMapRequest
-import com.google.android.gms.wearable.Wearable
+import com.wearconnectivityexample.R
+import com.wearconnectivityexample.service.WearDataClient
+import com.wearconnectivityexample.service.defaultWearDataClient
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
-import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.ToggleButton
-import com.wearconnectivityexample.R
-import androidx.wear.compose.material.Text
-import com.google.android.gms.wearable.DataMap
 
 @Composable
 fun RecordVoiceScreen(
-    onStopRecording: () -> Unit
+    onStopRecording: () -> Unit,
+    recorderProvider: () -> MediaRecorder = ::MediaRecorder,
+    messageSender: (Context, String) -> Unit = { context, filePath ->
+        sendVoiceMessage(context, filePath)
+    }
 ) {
     val context = LocalContext.current
 
@@ -52,7 +55,7 @@ fun RecordVoiceScreen(
 
     // Function to start recording.
     fun startRecording() {
-        val recorder = MediaRecorder().apply {
+        val recorder = recorderProvider().apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
@@ -78,7 +81,7 @@ fun RecordVoiceScreen(
             }
             mediaRecorder = null
             isRecording = false
-            sendVoiceMessage(context, outputFile)
+            messageSender(context, outputFile)
             onStopRecording();
         } catch (e: Exception) {
             Log.e("RecordVoiceScreen", "Error stopping recorder", e)
@@ -99,31 +102,19 @@ fun RecordVoiceScreen(
 /**
  * Sends the voice message file using the DataClient API.
  */
-fun sendVoiceMessage(context: Context, filePath: String) {
+fun sendVoiceMessage(
+    context: Context,
+    filePath: String,
+    dataClient: WearDataClient = defaultWearDataClient(context),
+    timestampProvider: () -> Long = System::currentTimeMillis
+) {
     val file = File(filePath)
-    val fileName = file.name // Extract the original filename (e.g., "voice_message.mp3")
-    val fileExtension = file.extension // Extract file type (e.g., "mp3", "wav")
-    val dataClient = Wearable.getDataClient(context)
-    val asset = try {
-        FileInputStream(file).use { fis ->
-            val bytes = ByteArray(file.length().toInt())
-            fis.read(bytes)
-            Asset.createFromBytes(bytes)
-        }
-    } catch (e: IOException) {
-        Log.e("RecordVoiceScreen", "Error creating asset", e)
+    val dataMapRequest = try {
+        createVoiceMessageDataMap(file, timestampProvider)
+    } catch (ioException: IOException) {
+        Log.e("RecordVoiceScreen", "Failed to prepare voice message asset", ioException)
         return
     }
-    val dataMapRequest = PutDataMapRequest.create("/file_transfer")
-    dataMapRequest.dataMap.putAsset("file", asset)
-    // Include metadata similar to Watch Connectivity API
-    // https://github.com/watch-connectivity/react-native-watch-connectivity/blob/f22da8191ec75daeaecb7a80a65b6c0a87f7d72b/ios/RNWatch/RNWatch.m#L466
-    val metadata = DataMap()
-    metadata.putString("fileName", fileName)
-    metadata.putString("fileType", fileExtension)
-    dataMapRequest.dataMap.putDataMap("metadata", metadata)
-
-    dataMapRequest.dataMap.putLong("timestamp", System.currentTimeMillis())
     val request = dataMapRequest.asPutDataRequest()
     dataClient.putDataItem(request)
         .addOnSuccessListener { dataItem ->
@@ -164,5 +155,32 @@ fun RecordComponent(onRecordClicked: () -> Unit, checked: Boolean) {
                 )
             }
         }
+    }
+}
+
+fun createVoiceMessageDataMap(
+    file: File,
+    timestampProvider: () -> Long
+): PutDataMapRequest {
+    val fileName = file.name
+    val fileExtension = file.extension
+    val asset = try {
+        FileInputStream(file).use { fis ->
+            val bytes = ByteArray(file.length().toInt())
+            fis.read(bytes)
+            Asset.createFromBytes(bytes)
+        }
+    } catch (e: IOException) {
+        Log.e("RecordVoiceScreen", "Error creating asset", e)
+        throw e
+    }
+    return PutDataMapRequest.create("/file_transfer").apply {
+        dataMap.putAsset("file", asset)
+        val metadata = DataMap().apply {
+            putString("fileName", fileName)
+            putString("fileType", fileExtension)
+        }
+        dataMap.putDataMap("metadata", metadata)
+        dataMap.putLong("timestamp", timestampProvider())
     }
 }
