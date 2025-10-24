@@ -25,6 +25,27 @@ git clone https://github.com/fabOnReact/wearos-communication-with-rn
 
 3) Now you can pair the WearOS emulator with the Android Mobile Emulator as explained in these [instructions](https://developer.android.com/training/wearables/get-started/connect-phone).
 
+### Generate a Wear OS starter project from this template
+
+You can scaffold a fresh copy of this project with a custom app name and package identifier by using the provided Node.js script:
+
+```
+yarn create-wearos-app --app-name "My Wear App" --package-name com.example.mywearapp
+```
+
+The command copies the Gradle project into a new directory (derived from the app name unless you pass `--output`) and automatically:
+
+- updates the `applicationId`, namespace, and Kotlin package declarations
+- renames the Android display name in `strings.xml` and `settings.gradle.kts`
+- recreates the Java/Kotlin source folder structure to match the package name
+
+Additional options:
+
+- `--output <dir>` – choose the destination folder (default: slugified app name)
+- `--force` – overwrite the destination folder if it already exists
+
+After generation you can open the new folder in Android Studio and run it as usual (`./gradlew build`).
+
 **Make sure you respect this requirements:**
 
 ### Both apps share the same package name and applicationId
