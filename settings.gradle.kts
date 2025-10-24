@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "ConnectivityAndroidExample"
 include(":app")
+include(":wearconnectivity")

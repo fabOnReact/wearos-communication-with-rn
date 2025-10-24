@@ -59,6 +59,7 @@ android {
 
 dependencies {
 
+    implementation(project(":wearconnectivity"))
     implementation("com.google.android.gms:play-services-wearable:18.0.0")
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
     implementation("androidx.compose.ui:ui")
