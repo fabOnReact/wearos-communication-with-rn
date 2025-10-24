@@ -1,13 +1,13 @@
 // WearApp.kt
-package com.example.wearconnectivityexample.ui
+package com.wearconnectivityexample.ui
 
 import androidx.compose.runtime.Composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.navigation.navArgument
-import com.example.mywearosapp.ui.screens.ChatDetailScreen
-import com.example.wearconnectivityexample.ui.screens.RecordVoiceScreen
+import com.wearconnectivityexample.ui.screens.ChatDetailScreen
+import com.wearconnectivityexample.ui.screens.RecordVoiceScreen
 import com.wearconnectivityexample.ui.screens.ChatListScreen
 
 @Composable

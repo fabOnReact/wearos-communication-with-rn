@@ -1,4 +1,4 @@
-package com.example.wearconnectivityexample.ui
+package com.wearconnectivityexample.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

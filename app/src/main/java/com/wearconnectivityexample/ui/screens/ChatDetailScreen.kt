@@ -1,4 +1,4 @@
-package com.example.mywearosapp.ui.screens
+package com.wearconnectivityexample.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape

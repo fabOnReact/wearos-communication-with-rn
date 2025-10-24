@@ -1,4 +1,4 @@
-package com.example.wearconnectivityexample.ui.screens
+package com.wearconnectivityexample.ui.screens
 
 import android.content.Context
 import android.media.MediaRecorder
@@ -6,8 +6,6 @@ import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -17,8 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material.Chip
-import androidx.wear.compose.material.ChipDefaults
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
@@ -32,9 +28,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.ToggleButton
 import com.wearconnectivityexample.R
-import androidx.wear.compose.material.Text
 import com.google.android.gms.wearable.DataMap
 
 @Composable
