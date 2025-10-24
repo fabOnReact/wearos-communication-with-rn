@@ -1,15 +1,21 @@
 package com.example.wearconnectivityexample.ui
 
+import android.Manifest
+import android.app.Activity
 import android.os.Bundle
+import android.content.pm.PackageManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import android.Manifest
-import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import android.app.Activity
+import androidx.lifecycle.lifecycleScope
+import com.fabonreact.wearconnectivity.WearMessagingClient
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+
+    private val wearMessagingClient by lazy { WearMessagingClient(applicationContext) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -19,7 +25,15 @@ class MainActivity : ComponentActivity() {
 
     public override fun onStart() {
         super.onStart()
-        requestAudioPermission(this);
+        requestAudioPermission(this)
+        lifecycleScope.launch {
+            wearMessagingClient.connect()
+        }
+    }
+
+    public override fun onStop() {
+        super.onStop()
+        wearMessagingClient.disconnect()
     }
 }
 
